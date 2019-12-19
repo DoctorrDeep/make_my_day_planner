@@ -12,7 +12,7 @@ I was reading [Deep Work](https://www.amazon.com/Cal-Newport/e/B001IGNR0U) (a bo
 
 On the 2nd point this project seeks to make life easier. The author suggests
 that we should keep and update a paper based plan that is easy to cross out and replan.
-If you are reading this, I hope this can be a better solution tahn pen and paper
+If you are reading this, I hope this can be a better solution than pen and paper
 
 
 # How to get the client ready
