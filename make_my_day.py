@@ -1,9 +1,10 @@
 import json
 import pickle
+import pytz
 import googleapiclient
 from pprint import pprint
 from pathlib import Path
-from datetime import datetime, timedelta
+from datetime import datetime
 from apiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 
@@ -11,6 +12,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 
 CLIENT_SECRET = "client_secret"
 CREDENTIAL_PICKLE = "calendar_access_credential.p"
+DEFAULT_COUNTRY_TIMEZONE = "Europe/Amsterdam"
 
 found_credentials_pickle = Path(".").joinpath(CREDENTIAL_PICKLE).exists()
 found_client_secret_json = Path(".").joinpath(f"{CLIENT_SECRET}.json").exists()
@@ -31,7 +33,7 @@ if calendar_name:
 else:
     print("Please enter a calendar name and press enter.")
 
-print(f"Ctrl + C to exit")
+print(f"OR Ctrl + C to exit")
 
 try:
     temp_calendar_name = str(input()).replace(" ", "")
@@ -43,13 +45,14 @@ try:
             json.dump(secrets, ou_f, indent=2)
 
         print(f"Calendar name {calendar_name} has been saved.")
-        print("Next time you run make_my_day.py, it will be an option to re-use")
+        print("Next time you run make_my_day.py, it will be re-used")
 
 except KeyboardInterrupt:
     print(
         """
-Day of making-my-day has been ended!
-Gee-whiz! A lot got done! Goodbye!
+      Day of making has ended!
+Gee-whiz! A lot got done, huh!
+                      Goodbye!
         """
     )
     exit()
@@ -57,9 +60,8 @@ Gee-whiz! A lot got done! Goodbye!
 if not found_credentials_pickle:
 
     if not found_client_secret_json:
-        print(
-            f"Did not find {CLIENT_SECRET}.json. Please follow readme and run me again."
-        )
+        print(f"Did not find {CLIENT_SECRET}.json.")
+        print("Please follow readme and run me again.")
         exit()
 
     scopes = ["https://www.googleapis.com/auth/calendar"]
@@ -75,31 +77,50 @@ with open(CREDENTIAL_PICKLE, "rb") as f:
     credentials = pickle.load(f)
 
 if not calendar_name:
-    print(
-        f"Could not get a calendar name somehow. Please inform the author. Aborting run now..."
-    )
+    print("Could not get a calendar name somehow.")
+    print("Please inform the author. Aborting run now...")
     exit()
+
+print(f"Timezone is set to {DEFAULT_COUNTRY_TIMEZONE}")
+print(f"Do you wish to keep it? [yes|no]. Default yes.")
+keep_timezone = str(input("")).replace(" ", "")
+
+if keep_timezone == "no":
+    found_good_timezone = False
+    while not found_good_timezone:
+        user_timezone = str(input("New timezone:")).replace(" ", "")
+        if user_timezone in pytz.common_timezones_set:
+            print(f"{user_timezone} set!")
+            found_good_timezone = True
+        else:
+            print(f"Did not find {user_timezone} in known timezones.")
+else:
+    user_timezone = DEFAULT_COUNTRY_TIMEZONE
 
 service = build("calendar", "v3", credentials=credentials)
 
-# TODO: Automatically GET todays date and construct `timeMin` and `timeMax`
+# TODO: [NTH] Check if the time between `timeMin` and `timeMax`is too less
 
 # ALl events from today in selected calendar
+
+current_time = datetime.now(pytz.timezone(user_timezone))
+timeMin = current_time.isoformat()
+timeMax = f"{timeMin.split('T')[0]}T23:59:59+{timeMin.split('+')[1]}"
 
 try:
     todays_events = (
         service.events()
         .list(
             calendarId=calendar_name,
-            timeMin="2019-12-17T00:00:00+01:00",
-            timeMax="2019-12-18T00:00:00+01:00",
+            timeMin=timeMin,
+            timeMax=timeMax,
             orderBy="startTime",
             singleEvents=True,
         )
         .execute()
     )
 except googleapiclient.errors.HttpError as err:
-    print(f"Could not complete query to google for calendar {calendar_name}.  ")
+    print(f"Could not complete query to google for calendar {calendar_name}.")
     print(f"We got the following response. \n{err._get_reason}")
     print("\nMaybe check the calendar name when entering next time.")
     exit()
@@ -112,18 +133,24 @@ sorted_events_with_summaries = sorted(
 
 # pprint(sorted_events_with_summaries)
 
-# TODO: Mention whether you are attending event or not
+# TODO: [NTH] Mention whether you are attending event or not
 # Used times
-print("events in your calendar")
-pprint([[i["start"]["dateTime"], i["end"]["dateTime"], i["summary"]] for i in sorted_events_with_summaries])
+print("Events in your calendar between")
+print(f"{timeMin} \nand \n{timeMax}\n")
+pprint(
+    [
+        [i["start"]["dateTime"], i["end"]["dateTime"], i["summary"]]
+        for i in sorted_events_with_summaries
+    ]
+)
 
-# TODO: Find unscheduled time from NOW (datetime.now())
+# TODO: [MUST HAVE] Find unscheduled time from NOW (datetime.now()) till end of day
 
-# TODO: Break up and offer 1 hour chunks of time for user to assign work to (create events about)
+# TODO: [MUST HAVE] Break up and offer 1 hour chunks of time for user to assign work to (create events about)
 
-# TODO: create the events
+# TODO: [MUST HAVE] create the events
 
-# TODO: create events with identifiers so that this code can recognize it
+# TODO: [MUST HAVE] create events with identifiers so that this code can recognize it
 
-# TODO: if there are events in the rest of the day that were previously made by this code
+# TODO: [MUST HAVE] if there are events in the rest of the day that were previously made by this code
 #      the user should get the option to retain or re-scedule the timeslot
