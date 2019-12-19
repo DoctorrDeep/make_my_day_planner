@@ -18,7 +18,8 @@ If you are reading this, I hope this can be a better solution tahn pen and paper
 # How to get the client ready
 
 * Install the python client for google and oauth
-  * `conda install --channel “conda-forge” google-auth google-auth-oauthlib google-api-python-client`
+  * Anaconda users : `conda install --channel “conda-forge” --file requirements.txt`
+  * Normal pip users : `pip install -r requirements.txt`
 * Intialize and create a secrets json
   * Create project in https://console.developers.google.com/
   * Enable the calendar API in `Library`

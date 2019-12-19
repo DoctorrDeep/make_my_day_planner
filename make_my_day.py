@@ -23,7 +23,6 @@ if found_client_secret_json:
     with open(f"{CLIENT_SECRET}.json", "r") as in_f:
         secrets = json.load(in_f)
         calendar_name = secrets.get("calendar_name")
-        print(calendar_name)
 
 
 if calendar_name:
