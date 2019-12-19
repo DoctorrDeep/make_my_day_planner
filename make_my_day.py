@@ -105,6 +105,7 @@ service = build("calendar", "v3", credentials=credentials)
 current_time = datetime.now(pytz.timezone(user_timezone))
 timeMin = current_time.isoformat()
 timeMax = f"{timeMin.split('T')[0]}T23:59:59+{timeMin.split('+')[1]}"
+end_day_time = datetime.fromisoformat(timeMax)
 
 try:
     todays_events = (
@@ -132,16 +133,21 @@ sorted_events_with_summaries = sorted(
 
 # pprint(sorted_events_with_summaries)
 
-# TODO: [NTH] Mention whether you are attending event or not
 # Used times
 print("Events in your calendar between")
 print(f"{timeMin} \nand \n{timeMax}\n")
-pprint(
-    [
-        [i["start"]["dateTime"], i["end"]["dateTime"], i["summary"]]
-        for i in sorted_events_with_summaries
-    ]
-)
+
+# pprint(sorted_events_with_summaries)
+
+for i in sorted_events_with_summaries:
+    my_response_status = "Unknown"
+    for attendee in i["attendees"]:
+        if attendee.get("self"):
+            my_response_status = attendee.get("responseStatus")
+
+    print(f"""
+You RSVP status is `{my_response_status}` on event named `{i["summary"]}`
+From {i["start"]["dateTime"].split("T")[1].split("+")[0]} till {i["end"]["dateTime"].split("T")[1].split("+")[0]}""")
 
 # TODO: [MUST HAVE] Find unscheduled time from NOW (datetime.now()) till end of day
 
