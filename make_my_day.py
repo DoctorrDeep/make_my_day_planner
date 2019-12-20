@@ -5,6 +5,7 @@ import googleapiclient
 from pprint import pprint
 from pathlib import Path
 from datetime import datetime
+
 from apiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 
@@ -26,8 +27,8 @@ if found_client_secret_json:
 
 
 if calendar_name:
-    print(f"Calendar Name is {calendar_name}.")
-    print(f"To conitune using {calendar_name} press enter.")
+    print(f"Calendar Name is `{calendar_name}`")
+    print(f"To conitune using `{calendar_name}` press enter")
     print(f"Do you want to use a new calendar? Type in new name and press enter.")
 else:
     print("Please enter a calendar name and press enter.")
@@ -43,7 +44,7 @@ try:
             secrets["calendar_name"] = calendar_name
             json.dump(secrets, ou_f, indent=2)
 
-        print(f"Calendar name {calendar_name} has been saved.")
+        print(f"Calendar name `{calendar_name}` has been saved.")
         print("Next time you run make_my_day.py, it will be re-used")
 
 except KeyboardInterrupt:
@@ -59,7 +60,7 @@ Gee-whiz! A lot got done, huh!
 if not found_credentials_pickle:
 
     if not found_client_secret_json:
-        print(f"Did not find {CLIENT_SECRET}.json.")
+        print(f"Did not find `{CLIENT_SECRET}.json`")
         print("Please follow readme and run me again.")
         exit()
 
@@ -80,7 +81,7 @@ if not calendar_name:
     print("Please inform the author. Aborting run now...")
     exit()
 
-print(f"Timezone is set to {DEFAULT_COUNTRY_TIMEZONE}")
+print(f"Timezone is set to `{DEFAULT_COUNTRY_TIMEZONE}`")
 print(f"Do you wish to keep it? [yes|no]. Default yes.")
 keep_timezone = str(input("")).replace(" ", "")
 
@@ -92,7 +93,7 @@ if keep_timezone == "no":
             print(f"{user_timezone} set!")
             found_good_timezone = True
         else:
-            print(f"Did not find {user_timezone} in known timezones.")
+            print(f"Did not find `{user_timezone}` in known timezones.")
 else:
     user_timezone = DEFAULT_COUNTRY_TIMEZONE
 
@@ -106,6 +107,13 @@ current_time = datetime.now(pytz.timezone(user_timezone))
 timeMin = current_time.isoformat()
 timeMax = f"{timeMin.split('T')[0]}T23:59:59+{timeMin.split('+')[1]}"
 end_day_time = datetime.fromisoformat(timeMax)
+
+#Uncomment when tetsing a specific datetime range
+# timeMin = "2019-12-20T08:00:00+01:00"
+# timeMax = f"{timeMin.split('T')[0]}T23:59:59+{timeMin.split('+')[1]}"
+# end_day_time = datetime.fromisoformat(timeMax)
+
+
 
 try:
     todays_events = (
@@ -131,24 +139,36 @@ sorted_events_with_summaries = sorted(
     key=lambda k: k["start"]["dateTime"],
 )
 
-# pprint(sorted_events_with_summaries)
-
 # Used times
 print("Events in your calendar between")
 print(f"{timeMin} \nand \n{timeMax}\n")
+
+# Events being attended
+attending_events = []
 
 # pprint(sorted_events_with_summaries)
 
 for i in sorted_events_with_summaries:
     my_response_status = "Unknown"
-    for attendee in i["attendees"]:
-        if attendee.get("self"):
-            my_response_status = attendee.get("responseStatus")
 
-    print(f"""
+    if calendar_name in [i["organizer"].get("email"), i["creator"].get("email")]:
+        my_response_status = i["status"]
+    else:
+        for attendee in i["attendees"]:
+            if attendee.get("self"):
+                my_response_status = attendee.get("responseStatus")
+
+    if my_response_status in ["accepted", "confirmed"]:
+        attending_events.append(i)
+
+        print(f"""
 You RSVP status is `{my_response_status}` on event named `{i["summary"]}`
 From {i["start"]["dateTime"].split("T")[1].split("+")[0]} till {i["end"]["dateTime"].split("T")[1].split("+")[0]}""")
 
+scheduled_time_blocks = [[i["start"]["dateTime"], i["end"]["dateTime"]] for i in attending_events]
+
+print(f"Busy times")
+pprint(scheduled_time_blocks)
 # TODO: [MUST HAVE] Find unscheduled time from NOW (datetime.now()) till end of day
 
 # TODO: [MUST HAVE] Break up and offer 1 hour chunks of time for user to assign work to (create events about)
