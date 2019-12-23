@@ -139,7 +139,6 @@ def get_next_avialable_open_timeset(a_timestamp: str, list_of_timesets: list) ->
         if datetime.fromisoformat(a_timestamp) <= datetime.fromisoformat(timeset[1]):
             filtered_list_of_timesets.append(timeset)
 
-
     index_of_last_timeset = len(filtered_list_of_timesets) - 1
     temp_timestamp = a_timestamp
 
@@ -232,7 +231,9 @@ def get_free_timeslots(timeMin: str, timeMax: str, scheduled_time_blocks: list) 
 
         new_list_of_scheduled_timesets = []
         for timeset in list_of_scheduled_timesets:
-            if datetime.fromisoformat(next_free_timeset[1]) < datetime.fromisoformat(timeset[1]):
+            if datetime.fromisoformat(next_free_timeset[1]) < datetime.fromisoformat(
+                timeset[1]
+            ):
                 new_list_of_scheduled_timesets.append(timeset)
         list_of_scheduled_timesets = new_list_of_scheduled_timesets
 
