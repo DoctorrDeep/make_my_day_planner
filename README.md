@@ -7,12 +7,12 @@ Work in progress...
 
 ### Inspiration
 I was reading [Deep Work](https://www.amazon.com/Cal-Newport/e/B001IGNR0U) (a book by Cal Newport). He stresses that in order to stay away for shallow and unproductive work it is important to plan your day in advance. The idea is to give yourself a reason to not prioritize low-prio work. The plans you make should *NOT*
-- discourage incidental: It happens, we should get used to it
-- make you rigid: When your day is disrupted, it should be easy to re-plan you day at the earliest and in the most seamless manner.
+- discourage incidentals: It happens, we should get used to it. Its work not a hermitage.
+- make you rigid: When your day is disrupted, it should be easy to re-plan your day at the earliest and in the most seamless manner.
 
 On the 2nd point this project seeks to make life easier. The author suggests
 that we should keep and update a paper based plan that is easy to cross out and replan.
-If you are reading this, I hope this can be a better solution than pen and paper
+If you are reading this, I hope this can be a better solution than pen and paper.
 
 
 # How to get the client ready
