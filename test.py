@@ -144,3 +144,28 @@ for timeMin, expected_free_timeblocks in timeMin_free_time_dict.items():
 )
 def test_1(expected_free_timeblocks, received_free_timeblocks):
     assert received_free_timeblocks == expected_free_timeblocks
+
+
+
+def test_2():
+    timeMin = '2019-12-24T15:30:58.670671+01:00'
+    timeMax = '2019-12-24T23:59:59+01:00'
+    scheduled_time_blocks = [['2019-12-24T16:00:00+01:00', '2019-12-24T17:00:00+01:00']]
+    received_free_timeblocks = get_free_timeslots(timeMin, timeMax, scheduled_time_blocks)
+    expected_free_timeblocks = [
+        ['2019-12-24T15:30:58.670671+01:00', '2019-12-24T16:00:00+01:00'],
+        ['2019-12-24T17:00:00+01:00', '2019-12-24T23:59:59+01:00'],
+    ]
+    assert received_free_timeblocks == expected_free_timeblocks
+
+
+def test_3():
+    timeMin = '2019-12-24T15:30:00+01:00'
+    timeMax = '2019-12-24T23:59:00+01:00'
+    scheduled_time_blocks = [['2019-12-24T16:00:00+01:00', '2019-12-24T17:00:00+01:00']]
+    received_free_timeblocks = get_free_timeslots(timeMin, timeMax, scheduled_time_blocks)
+    expected_free_timeblocks = [
+        ['2019-12-24T15:30:00+01:00', '2019-12-24T16:00:00+01:00'],
+        ['2019-12-24T17:00:00+01:00', '2019-12-24T23:59:00+01:00'],
+    ]
+    assert received_free_timeblocks == expected_free_timeblocks

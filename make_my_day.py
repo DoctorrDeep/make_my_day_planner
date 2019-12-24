@@ -206,11 +206,11 @@ def get_free_timeslots(timeMin: str, timeMax: str, scheduled_time_blocks: list) 
 
     while not reached_end_of_day:
 
-        print("\nNext free timestamp + busy timesets + list of free timeslots")
-        print(beginning_of_free_time)
-        pprint(list_of_scheduled_timesets)
-        pprint(list_of_free_timesets)
-        print("Done.\n")
+        # print("\nNext free timestamp + busy timesets + list of free timeslots")
+        # print(beginning_of_free_time)
+        # pprint(list_of_scheduled_timesets)
+        # pprint(list_of_free_timesets)
+        # print("Done.\n")
 
         free_timeset_results = get_next_avialable_open_timeset(
             beginning_of_free_time, list_of_scheduled_timesets
@@ -245,8 +245,8 @@ def get_free_timeslots(timeMin: str, timeMax: str, scheduled_time_blocks: list) 
                 new_list_of_scheduled_timesets.append(timeset)
         list_of_scheduled_timesets = new_list_of_scheduled_timesets
 
-    print("List of free timesets")
-    pprint(list_of_free_timesets)
+    # print("List of free timesets")
+    # pprint(list_of_free_timesets)
 
     return list_of_free_timesets
 
