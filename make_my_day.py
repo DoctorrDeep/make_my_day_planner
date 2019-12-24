@@ -3,6 +3,7 @@ import pickle
 import copy
 import pytz
 import time
+import sys
 import googleapiclient
 from pprint import pprint
 from pathlib import Path
@@ -11,7 +12,14 @@ from datetime import datetime, timedelta
 from apiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 
-# TODO: Check python version
+try:
+    # TODO: [NTH] improve assert since the code breaks due to
+    #       typehints before it can execute this following check.
+    assert sys.version_info >= (3, 7)
+except AssertionError:
+    print("Please user Python 3.7 and above.")
+    print("Aborting this run.")
+    exit()
 
 CLIENT_SECRET = "client_secret"
 CREDENTIAL_PICKLE = "calendar_access_credential.p"
@@ -198,11 +206,11 @@ def get_free_timeslots(timeMin: str, timeMax: str, scheduled_time_blocks: list) 
 
     while not reached_end_of_day:
 
-        # print("\nNext free timestamp + busy timesets + list of free timeslots")
-        # print(beginning_of_free_time)
-        # pprint(list_of_scheduled_timesets)
-        # pprint(list_of_free_timesets)
-        # print("Done.\n")
+        print("\nNext free timestamp + busy timesets + list of free timeslots")
+        print(beginning_of_free_time)
+        pprint(list_of_scheduled_timesets)
+        pprint(list_of_free_timesets)
+        print("Done.\n")
 
         free_timeset_results = get_next_avialable_open_timeset(
             beginning_of_free_time, list_of_scheduled_timesets
@@ -237,8 +245,8 @@ def get_free_timeslots(timeMin: str, timeMax: str, scheduled_time_blocks: list) 
                 new_list_of_scheduled_timesets.append(timeset)
         list_of_scheduled_timesets = new_list_of_scheduled_timesets
 
-    # print("List of free timesets")
-    # pprint(list_of_free_timesets)
+    print("List of free timesets")
+    pprint(list_of_free_timesets)
 
     return list_of_free_timesets
 
