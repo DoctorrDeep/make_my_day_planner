@@ -151,7 +151,10 @@ def get_next_avialable_open_timeset(a_timestamp: str, list_of_timesets: list) ->
         print_time_data("Next available_timeset: filtering effect from:", sorted_list_of_timesets)
         print_time_data("Next available_timeset: filtering effect to:", filtered_list_of_timesets)
 
-    index_of_last_timeset = len(filtered_list_of_timesets) - 1
+    # the last timeset triggers some actions. However if the last is also the first
+    #     i.e. list of 1 timeset, then its too early to set off the trigger
+    index_of_last_timeset = (len(filtered_list_of_timesets) - 1) or 1
+
     temp_timestamp = a_timestamp
 
     for timeset_index, timeset in enumerate(filtered_list_of_timesets):
