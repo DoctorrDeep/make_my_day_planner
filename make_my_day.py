@@ -21,9 +21,17 @@ except AssertionError:
     print("Aborting this run.")
     exit()
 
+DEBUG_MODE = False
 CLIENT_SECRET = "client_secret"
 CREDENTIAL_PICKLE = "calendar_access_credential.p"
 DEFAULT_COUNTRY_TIMEZONE = "Europe/Amsterdam"
+
+
+def print_time_data(helptext: str, timestr, override_debug: bool=False):
+
+    if DEBUG_MODE or override_debug:
+        print("\n",helptext)
+        pprint(timestr)
 
 
 def validate_update_timeset(a_timeset: list) -> list:
@@ -80,14 +88,6 @@ def validate_update_timestamp(a_timeset: list, list_of_timesets: list) -> list:
     temp_timeset = copy.deepcopy(a_timeset)
     new_timeset = copy.deepcopy(a_timeset)
 
-    # print("\nFrom inside : validate update timestamp")
-    # print("Received Timeset:")
-    # pprint(a_timeset)
-    # print("Received List:")
-    # pprint(list_of_timesets)
-    # print("Filtered list:")
-    # pprint(new_list_of_timesets)
-
     for timeset in list_of_timesets:
 
         if datetime.fromisoformat(temp_timeset[0]) >= datetime.fromisoformat(
@@ -98,7 +98,7 @@ def validate_update_timestamp(a_timeset: list, list_of_timesets: list) -> list:
             new_timeset = validate_update_timeset([timeset[1], temp_timeset[1]])
             temp_timeset = new_timeset
 
-            # print(f"\t{a_timeset}\n\tChanged to\n\t{temp_timeset}")
+            print_time_data(f"{a_timeset}\n\tChanged to:", temp_timeset)
 
         if datetime.fromisoformat(temp_timeset[1]) > datetime.fromisoformat(
             timeset[0]
@@ -108,11 +108,11 @@ def validate_update_timestamp(a_timeset: list, list_of_timesets: list) -> list:
             new_timeset = validate_update_timeset([temp_timeset[0], timeset[0]])
             temp_timeset = new_timeset
 
-            # print(f"\t{a_timeset}\n\tChanged to\n\t{temp_timeset}")
+            print_time_data(f"{a_timeset}\n\tChanged to:", temp_timeset)
 
-    # print("New timeset")
-    # pprint(new_timeset)
-    # print("Finished validate update timestamp")
+    print_time_data("validate update timestamp, Received Timeset:", a_timeset)
+    print_time_data("validate update timestamp, Received List:", list_of_timesets)
+    print_time_data("validate update timestamp, New Timeset:", new_timeset)
 
     return new_timeset
 
@@ -147,6 +147,10 @@ def get_next_avialable_open_timeset(a_timestamp: str, list_of_timesets: list) ->
         if datetime.fromisoformat(a_timestamp) <= datetime.fromisoformat(timeset[1]):
             filtered_list_of_timesets.append(timeset)
 
+    if filtered_list_of_timesets != sorted_list_of_timesets:
+        print_time_data("Next available_timeset: filtering effect from:", sorted_list_of_timesets)
+        print_time_data("Next available_timeset: filtering effect to:", filtered_list_of_timesets)
+
     index_of_last_timeset = len(filtered_list_of_timesets) - 1
     temp_timestamp = a_timestamp
 
@@ -157,8 +161,9 @@ def get_next_avialable_open_timeset(a_timestamp: str, list_of_timesets: list) ->
             if timeset_index != index_of_last_timeset:
                 results["reached_end_of_list"] = False
 
-            # print("Going to break")
-            # print(timeset, temp_timestamp)
+            print_time_data("Next available_timeset: Going to break: current timeset", timeset)
+            print_time_data("Next available_timeset: Going to break: timestamp", temp_timestamp)
+            print_time_data("Next available_timeset: Going to break: results", results)
             break
 
         temp_timestamp = timeset[1]
@@ -170,6 +175,8 @@ def get_next_avialable_open_timeset(a_timestamp: str, list_of_timesets: list) ->
             results["next_free_timeset"], filtered_list_of_timesets
         )
         results["next_free_timeset"] = temp_timeset
+
+    print_time_data("Next available_timeset: Final results", results)
 
     return results
 
@@ -206,11 +213,9 @@ def get_free_timeslots(timeMin: str, timeMax: str, scheduled_time_blocks: list) 
 
     while not reached_end_of_day:
 
-        # print("\nNext free timestamp + busy timesets + list of free timeslots")
-        # print(beginning_of_free_time)
-        # pprint(list_of_scheduled_timesets)
-        # pprint(list_of_free_timesets)
-        # print("Done.\n")
+        print_time_data("Get free timeslot: (while loop) Next free timestamp", beginning_of_free_time)
+        print_time_data("Get free timeslot: (while loop) Blocked time", list_of_scheduled_timesets)
+        print_time_data("Get free timeslot: (while loop) List of free time", list_of_free_timesets)
 
         free_timeset_results = get_next_avialable_open_timeset(
             beginning_of_free_time, list_of_scheduled_timesets
@@ -218,7 +223,7 @@ def get_free_timeslots(timeMin: str, timeMax: str, scheduled_time_blocks: list) 
 
         if free_timeset_results["reached_end_of_list"]:
             next_free_timeset = [beginning_of_free_time, timeMax]
-            print("Reached End of Day")
+            print_time_data("Get free timeslot: (while loop) Reached End of Day: Next free timeset", next_free_timeset)
             reached_end_of_day = True
             if free_timeset_results["next_free_timeset"] == None:
                 next_free_timeset = validate_update_timestamp(
@@ -232,7 +237,7 @@ def get_free_timeslots(timeMin: str, timeMax: str, scheduled_time_blocks: list) 
         else:
             if previous_result == next_free_timeset:
                 reached_end_of_day = True
-                print("Force closing loop because inf.")
+                print_time_data("Get free timeslot: (while loop) Force closing loop because inf: Next free timeset", next_free_timeset)
 
         beginning_of_free_time = next_free_timeset[1]
         previous_result = next_free_timeset
@@ -245,8 +250,7 @@ def get_free_timeslots(timeMin: str, timeMax: str, scheduled_time_blocks: list) 
                 new_list_of_scheduled_timesets.append(timeset)
         list_of_scheduled_timesets = new_list_of_scheduled_timesets
 
-    # print("List of free timesets")
-    # pprint(list_of_free_timesets)
+    print_time_data("Get free timeslot: Final List of free timesets", list_of_free_timesets)
 
     return list_of_free_timesets
 
@@ -434,12 +438,9 @@ if __name__ == "__main__":
 
     free_timeblocks = get_free_timeslots(timeMin, timeMax, scheduled_time_blocks)
 
-    print("\nCurrent time")
-    pprint(timeMin)
-    print("\nBusy times")
-    pprint(scheduled_time_blocks)
-    print("\nFree times")
-    pprint(free_timeblocks)
+    print_time_data("Final result: Current time ", timeMin, True)
+    print_time_data("Final result: Blocked time ", scheduled_time_blocks, True)
+    print_time_data("Final result: Free time ", free_timeblocks, True)
 
 # TODO: [MUST HAVE] Break up and offer 1 hour chunks of time for user to assign work to (create events about)
 

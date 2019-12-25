@@ -119,9 +119,9 @@ for a_timeMin, a_free_result_list in timeMins_raw.items():
 
 timeMax = f"{time_s_p[0]}{timeMax_raw}{time_s_p[1]}"
 
-pprint(scheduled_time_blocks)
-pprint(timeMin_free_time_dict)
-pprint(timeMax)
+# pprint(scheduled_time_blocks)
+# pprint(timeMin_free_time_dict)
+# pprint(timeMax)
 
 free_timeblock_expected_and_received_results = []
 
@@ -133,9 +133,9 @@ for timeMin, expected_free_timeblocks in timeMin_free_time_dict.items():
         [expected_free_timeblocks, received_free_timeblocks]
     )
 
-    print(timeMin)
-    pprint(received_free_timeblocks)
-    pprint(expected_free_timeblocks)
+    # print(timeMin)
+    # pprint(received_free_timeblocks)
+    # pprint(expected_free_timeblocks)
 
 
 @pytest.mark.parametrize(
@@ -169,3 +169,16 @@ def test_3():
         ['2019-12-24T17:00:00+01:00', '2019-12-24T23:59:00+01:00'],
     ]
     assert received_free_timeblocks == expected_free_timeblocks
+
+
+
+if __name__ == "__main__":
+
+    """
+    If the tests need to be run in isolation without pytest
+    i.e. `python test.py` to trigger tests outside pytest
+    """
+    print("===========================================================")
+    test_2()
+    print("===========================================================")
+    test_3()
