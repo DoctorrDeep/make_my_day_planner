@@ -2,9 +2,6 @@ import pytest
 from pprint import pprint
 
 from make_my_day import get_free_timeslots
-# from pathlib import Path
-# print(Path().cwd())
-# print("HI!2")
 
 """
 Pytest file for testing.
@@ -122,10 +119,6 @@ for a_timeMin, a_free_result_list in timeMins_raw.items():
 
 timeMax = f"{time_s_p[0]}{timeMax_raw}{time_s_p[1]}"
 
-# pprint(scheduled_time_blocks)
-# pprint(timeMin_free_time_dict)
-# pprint(timeMax)
-
 free_timeblock_expected_and_received_results = []
 
 for timeMin, expected_free_timeblocks in timeMin_free_time_dict.items():
@@ -135,10 +128,6 @@ for timeMin, expected_free_timeblocks in timeMin_free_time_dict.items():
     free_timeblock_expected_and_received_results.append(
         [expected_free_timeblocks, received_free_timeblocks]
     )
-
-    # print(timeMin)
-    # pprint(received_free_timeblocks)
-    # pprint(expected_free_timeblocks)
 
 
 @pytest.mark.parametrize(

@@ -27,10 +27,10 @@ CREDENTIAL_PICKLE = "calendar_access_credential.p"
 DEFAULT_COUNTRY_TIMEZONE = "Europe/Amsterdam"
 
 
-def print_time_data(helptext: str, timestr, override_debug: bool=False):
+def print_time_data(helptext: str, timestr, override_debug: bool = False):
 
     if DEBUG_MODE or override_debug:
-        print("\n",helptext)
+        print("\n", helptext)
         pprint(timestr)
 
 
@@ -148,8 +148,12 @@ def get_next_avialable_open_timeset(a_timestamp: str, list_of_timesets: list) ->
             filtered_list_of_timesets.append(timeset)
 
     if filtered_list_of_timesets != sorted_list_of_timesets:
-        print_time_data("Next available_timeset: filtering effect from:", sorted_list_of_timesets)
-        print_time_data("Next available_timeset: filtering effect to:", filtered_list_of_timesets)
+        print_time_data(
+            "Next available_timeset: filtering effect from:", sorted_list_of_timesets
+        )
+        print_time_data(
+            "Next available_timeset: filtering effect to:", filtered_list_of_timesets
+        )
 
     # the last timeset triggers some actions. However if the last is also the first
     #     i.e. list of 1 timeset, then its too early to set off the trigger
@@ -164,8 +168,12 @@ def get_next_avialable_open_timeset(a_timestamp: str, list_of_timesets: list) ->
             if timeset_index != index_of_last_timeset:
                 results["reached_end_of_list"] = False
 
-            print_time_data("Next available_timeset: Going to break: current timeset", timeset)
-            print_time_data("Next available_timeset: Going to break: timestamp", temp_timestamp)
+            print_time_data(
+                "Next available_timeset: Going to break: current timeset", timeset
+            )
+            print_time_data(
+                "Next available_timeset: Going to break: timestamp", temp_timestamp
+            )
             print_time_data("Next available_timeset: Going to break: results", results)
             break
 
@@ -216,9 +224,16 @@ def get_free_timeslots(timeMin: str, timeMax: str, scheduled_time_blocks: list) 
 
     while not reached_end_of_day:
 
-        print_time_data("Get free timeslot: (while loop) Next free timestamp", beginning_of_free_time)
-        print_time_data("Get free timeslot: (while loop) Blocked time", list_of_scheduled_timesets)
-        print_time_data("Get free timeslot: (while loop) List of free time", list_of_free_timesets)
+        print_time_data(
+            "Get free timeslot: (while loop) Next free timestamp",
+            beginning_of_free_time,
+        )
+        print_time_data(
+            "Get free timeslot: (while loop) Blocked time", list_of_scheduled_timesets
+        )
+        print_time_data(
+            "Get free timeslot: (while loop) List of free time", list_of_free_timesets
+        )
 
         free_timeset_results = get_next_avialable_open_timeset(
             beginning_of_free_time, list_of_scheduled_timesets
@@ -226,7 +241,10 @@ def get_free_timeslots(timeMin: str, timeMax: str, scheduled_time_blocks: list) 
 
         if free_timeset_results["reached_end_of_list"]:
             next_free_timeset = [beginning_of_free_time, timeMax]
-            print_time_data("Get free timeslot: (while loop) Reached End of Day: Next free timeset", next_free_timeset)
+            print_time_data(
+                "Get free timeslot: (while loop) Reached End of Day: Next free timeset",
+                next_free_timeset,
+            )
             reached_end_of_day = True
             if free_timeset_results["next_free_timeset"] == None:
                 next_free_timeset = validate_update_timestamp(
@@ -240,7 +258,10 @@ def get_free_timeslots(timeMin: str, timeMax: str, scheduled_time_blocks: list) 
         else:
             if previous_result == next_free_timeset:
                 reached_end_of_day = True
-                print_time_data("Get free timeslot: (while loop) Force closing loop because inf: Next free timeset", next_free_timeset)
+                print_time_data(
+                    "Get free timeslot: (while loop) Force closing loop because inf: Next free timeset",
+                    next_free_timeset,
+                )
 
         beginning_of_free_time = next_free_timeset[1]
         previous_result = next_free_timeset
@@ -253,7 +274,9 @@ def get_free_timeslots(timeMin: str, timeMax: str, scheduled_time_blocks: list) 
                 new_list_of_scheduled_timesets.append(timeset)
         list_of_scheduled_timesets = new_list_of_scheduled_timesets
 
-    print_time_data("Get free timeslot: Final List of free timesets", list_of_free_timesets)
+    print_time_data(
+        "Get free timeslot: Final List of free timesets", list_of_free_timesets
+    )
 
     return list_of_free_timesets
 
