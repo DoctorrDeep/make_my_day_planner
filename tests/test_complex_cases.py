@@ -2,6 +2,9 @@ import pytest
 from pprint import pprint
 
 from make_my_day import get_free_timeslots
+# from pathlib import Path
+# print(Path().cwd())
+# print("HI!2")
 
 """
 Pytest file for testing.
@@ -142,71 +145,5 @@ for timeMin, expected_free_timeblocks in timeMin_free_time_dict.items():
     "expected_free_timeblocks, received_free_timeblocks",
     free_timeblock_expected_and_received_results,
 )
-def test_1(expected_free_timeblocks, received_free_timeblocks):
+def test_complex_case(expected_free_timeblocks, received_free_timeblocks):
     assert received_free_timeblocks == expected_free_timeblocks
-
-
-
-def test_2():
-    timeMin = '2019-12-24T15:30:58.670671+01:00'
-    timeMax = '2019-12-24T23:59:59+01:00'
-    scheduled_time_blocks = [['2019-12-24T16:00:00+01:00', '2019-12-24T17:00:00+01:00']]
-    received_free_timeblocks = get_free_timeslots(timeMin, timeMax, scheduled_time_blocks)
-    expected_free_timeblocks = [
-        ['2019-12-24T15:30:58.670671+01:00', '2019-12-24T16:00:00+01:00'],
-        ['2019-12-24T17:00:00+01:00', '2019-12-24T23:59:59+01:00'],
-    ]
-    assert received_free_timeblocks == expected_free_timeblocks
-
-
-def test_3():
-    timeMin = '2019-12-24T16:00:00+01:00'
-    timeMax = '2019-12-24T23:59:59+01:00'
-    scheduled_time_blocks = [['2019-12-24T16:00:00+01:00', '2019-12-24T17:00:00+01:00']]
-    received_free_timeblocks = get_free_timeslots(timeMin, timeMax, scheduled_time_blocks)
-    expected_free_timeblocks = [
-        ['2019-12-24T17:00:00+01:00', '2019-12-24T23:59:59+01:00'],
-    ]
-    assert received_free_timeblocks == expected_free_timeblocks
-
-
-def test_4():
-    timeMin = '2019-12-24T16:30:00+01:00'
-    timeMax = '2019-12-24T23:59:59+01:00'
-    scheduled_time_blocks = [['2019-12-24T16:00:00+01:00', '2019-12-24T17:00:00+01:00']]
-    received_free_timeblocks = get_free_timeslots(timeMin, timeMax, scheduled_time_blocks)
-    expected_free_timeblocks = [
-        ['2019-12-24T17:00:00+01:00', '2019-12-24T23:59:59+01:00'],
-    ]
-    assert received_free_timeblocks == expected_free_timeblocks
-
-def test_5():
-    timeMin = '2019-12-24T17:00:00+01:00'
-    timeMax = '2019-12-24T23:59:59+01:00'
-    scheduled_time_blocks = [['2019-12-24T16:00:00+01:00', '2019-12-24T17:00:00+01:00']]
-    received_free_timeblocks = get_free_timeslots(timeMin, timeMax, scheduled_time_blocks)
-    expected_free_timeblocks = [
-        ['2019-12-24T17:00:00+01:00', '2019-12-24T23:59:59+01:00'],
-    ]
-    assert received_free_timeblocks == expected_free_timeblocks
-
-def test_6():
-    timeMin = '2019-12-24T17:30:00+01:00'
-    timeMax = '2019-12-24T23:59:59+01:00'
-    scheduled_time_blocks = [['2019-12-24T16:00:00+01:00', '2019-12-24T17:00:00+01:00']]
-    received_free_timeblocks = get_free_timeslots(timeMin, timeMax, scheduled_time_blocks)
-    expected_free_timeblocks = [
-        ['2019-12-24T17:30:00+01:00', '2019-12-24T23:59:59+01:00'],
-    ]
-    assert received_free_timeblocks == expected_free_timeblocks
-
-
-
-if __name__ == "__main__":
-
-    """
-    If the tests need to be run in isolation without pytest
-    i.e. `python test.py` to trigger tests outside pytest
-    """
-    print("===========================================================")
-    test_2()
