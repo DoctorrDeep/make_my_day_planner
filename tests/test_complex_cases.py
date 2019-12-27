@@ -5,7 +5,7 @@ from make_my_day import get_free_timeslots
 
 """
 Pytest file for testing.
-Run with `pytest -vvvv test.py`
+Run with `pytest` in root of project
 """
 
 """
