@@ -1,5 +1,4 @@
 import pytest
-from pprint import pprint
 
 from make_my_day import get_free_timeslots
 
