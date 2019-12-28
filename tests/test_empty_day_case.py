@@ -35,9 +35,7 @@ scheduled_time_blocks_raw = []
 
 timeMax_raw = "23:59"
 
-timeMins_raw = {
-    "17:30": [["17:30", "23:59"]],
-}
+timeMins_raw = {"17:30": [["17:30", "23:59"]]}
 
 scheduled_time_blocks = [
     [f"{time_s_p[0]}{i[0]}{time_s_p[1]}", f"{time_s_p[0]}{i[1]}{time_s_p[1]}"]
