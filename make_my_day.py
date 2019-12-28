@@ -2,12 +2,11 @@ import json
 import pickle
 import copy
 import pytz
-import time
 import sys
 import googleapiclient
 from pprint import pprint
 from pathlib import Path
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from apiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -220,7 +219,7 @@ def get_free_timeslots(timeMin: str, timeMax: str, scheduled_time_blocks: list) 
                 next_free_timeset,
             )
             reached_end_of_day = True
-            if free_timeset_results["next_free_timeset"] == None:
+            if not free_timeset_results.get("next_free_timeset"):
                 next_free_timeset = validate_update_timestamp(
                     next_free_timeset, list_of_scheduled_timesets
                 )
@@ -256,6 +255,7 @@ def get_free_timeslots(timeMin: str, timeMax: str, scheduled_time_blocks: list) 
 
 
 def setup() -> dict:
+
     """
     The following actions will be carried out
     - oauth with google calendar
@@ -364,7 +364,6 @@ def setup() -> dict:
     current_time = datetime.now(pytz.timezone(user_timezone))
     timeMin = current_time.isoformat()
     timeMax = f"{timeMin.split('T')[0]}T23:59:59+{timeMin.split('+')[1]}"
-    end_day_time = datetime.fromisoformat(timeMax)
 
     try:
         todays_events = (
@@ -421,20 +420,22 @@ def setup() -> dict:
         [i["start"]["dateTime"], i["end"]["dateTime"]] for i in attending_events
     ]
 
-    return {
+    time_data_dict = {
         "scheduled_time_blocks": scheduled_time_blocks,
         "timeMin": timeMin,
         "timeMax": timeMax,
     }
+
+    return time_data_dict
 
 
 if __name__ == "__main__":
 
     time_data_dict = setup()
 
+    scheduled_time_blocks = time_data_dict["scheduled_time_blocks"]
     timeMin = time_data_dict["timeMin"]
     timeMax = time_data_dict["timeMax"]
-    scheduled_time_blocks = time_data_dict["scheduled_time_blocks"]
 
     free_timeblocks = get_free_timeslots(timeMin, timeMax, scheduled_time_blocks)
 
