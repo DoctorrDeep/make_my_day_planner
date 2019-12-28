@@ -432,6 +432,8 @@ def setup() -> dict:
 if __name__ == "__main__":
 
     time_data_dict = setup()
+    # TODO: Reduce complexity of `setup()` and check if flake8 passes
+    #       Once completed, remove ignore in `.github/workflows/pythonapp.yml`
 
     scheduled_time_blocks = time_data_dict["scheduled_time_blocks"]
     timeMin = time_data_dict["timeMin"]
