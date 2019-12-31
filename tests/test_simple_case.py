@@ -1,6 +1,6 @@
 import pytest
 
-from make_my_day import get_free_timeslots
+from app_scripts.get_free_timeslots import get_free_timeslots
 
 """
 Pytest file for testing.
@@ -12,7 +12,7 @@ If any test fails, drop to the python shell and use the following to execute
 tests for a specific timeMin
 
 ```
-from make_my_day import get_free_timeslots
+from app_scripts.get_free_timeslots import get_free_timeslots
 timeMin = '2019-12-14T13:00:00+01:00'
 timeMax = '2019-12-14T23:59:00+01:00'
 scheduled_time_blocks = [['2019-12-14T09:00:00+01:00', '2019-12-14T10:00:00+01:00'],
