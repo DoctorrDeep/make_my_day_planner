@@ -1,4 +1,5 @@
 import json
+import copy
 import pickle
 import pytz
 import sys
@@ -28,6 +29,8 @@ DEBUG_MODE = True
 CLIENT_SECRET = "client_secret"
 CREDENTIAL_PICKLE = "calendar_access_credential.p"
 DEFAULT_COUNTRY_TIMEZONE = "Europe/Amsterdam"
+
+DEFAULT_DESCRIPTION_PREFIX = "make_my_day_event"
 
 """
 The following actions will be carried out
@@ -212,10 +215,42 @@ print_time_data(
     "Final result: Broken up time blocks ", plannable_timeblocks, True, True
 )
 
+default_event_details = {
+    "summary": "make_my_day event",
+    "location": "Delft Station, Delft",
+    "description": "",
+}
+
+for a_plannable_timeblock in plannable_timeblocks:
+
+    print("For timeblock")
+    print(a_plannable_timeblock)
+
+    temp_details = copy.deepcopy(default_event_details)
+
+    for detail in default_event_details.keys():
+
+        temp = str(input(f"[Leave empty and press enter to use default]\n{detail}:"))
+        if temp == "":
+            temp = default_event_details[detail]
+
+        temp_details[detail] = temp
+
+    summary = temp_details["summary"]
+    location = temp_details["location"]
+    description = temp_details["description"]
+
+    event = {
+        "summary": summary,
+        "location": location,
+        "description": f"{DEFAULT_DESCRIPTION_PREFIX}: {description}",
+        "start": {"dateTime": a_plannable_timeblock[0], "timeZone": user_timezone},
+        "end": {"dateTime": a_plannable_timeblock[1], "timeZone": user_timezone},
+    }
+
+    event = service.events().insert(calendarId=calendar_name, body=event).execute()
+    # print(f"Event created: {event.get('htmlLink')}")
+
 
 # TODO: [MUST HAVE] if there are events in the rest of the day that were previously made by this code
 #      the user should get the option to retain or re-scedule the timeslot
-
-# TODO: [MUST HAVE] create the events
-
-# TODO: [MUST HAVE] create events with identifiers so that this code can recognize it
