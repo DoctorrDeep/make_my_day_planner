@@ -68,7 +68,7 @@ def break_up_free_timeblocks(
             datetime.fromisoformat(timeblock[1]) - datetime.fromisoformat(timeblock[0])
         ).total_seconds()
 
-        if duration_of_timeblock > MIN_TIMEBLOCK_DURATION:
+        if duration_of_timeblock >= MIN_TIMEBLOCK_DURATION:
             plannable_timeblocks_list.append(timeblock)
 
     if debug_mode:
