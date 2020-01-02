@@ -1,9 +1,7 @@
-import pytest
-
 from app_scripts.break_up_free_timeblocks import break_up_free_timeblocks
 
-
 time_s_p = ["2019-12-14T", ":00+01:00"]
+
 
 def test_break_up_free_timeblocks_single_timeblock_cases_1():
     free_timeslots_raw = [["08:00", "10:00"]]
@@ -136,7 +134,7 @@ def test_break_up_free_timeblocks_single_timeblock_cases_7():
 def test_break_up_free_timeblocks_single_timeblock_cases_8():
     free_timeslots_raw = [["08:00", "09:11"]]
 
-    expected_plannable_timeblocks_raw = [["08:00", "09:00"],["09:00", "09:11"]]
+    expected_plannable_timeblocks_raw = [["08:00", "09:00"], ["09:00", "09:11"]]
 
     free_timeslots = [
         [f"{time_s_p[0]}{i[0]}{time_s_p[1]}", f"{time_s_p[0]}{i[1]}{time_s_p[1]}"]
@@ -155,7 +153,7 @@ def test_break_up_free_timeblocks_single_timeblock_cases_8():
 def test_break_up_free_timeblocks_single_timeblock_cases_9():
     free_timeslots_raw = [["08:00", "09:10"]]
 
-    expected_plannable_timeblocks_raw = [["08:00", "09:00"],["09:00", "09:10"]]
+    expected_plannable_timeblocks_raw = [["08:00", "09:00"], ["09:00", "09:10"]]
 
     free_timeslots = [
         [f"{time_s_p[0]}{i[0]}{time_s_p[1]}", f"{time_s_p[0]}{i[1]}{time_s_p[1]}"]
