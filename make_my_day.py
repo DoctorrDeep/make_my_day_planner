@@ -15,8 +15,9 @@ from app_scripts.get_free_timeslots import get_free_timeslots
 from app_scripts.break_up_free_timeblocks import break_up_free_timeblocks
 
 try:
-    # TODO: [NTH] improve assert since the code breaks due to
-    #       typehints before it can execute this following check.
+    # TODO: [NTH] try-except broken since the code breaks due to compiler error
+    #       ->invalid syntax before it can execute this following check.
+    #       Compiler error on f-strings before runtime error can be caught.
     assert sys.version_info >= (3, 7)
 except AssertionError:
     print("Please user Python 3.7 and above.")
@@ -34,7 +35,7 @@ The following actions will be carried out
 - set timezone of user
 - fetch todays events
 
-It will return the following in dictionary form:
+It will create the following in dictionary(time_data_dict) format:
 - timeMin: isoformat timestamp string
 - timeMax: isoformat timestamp string
 - scheduled_time_blocks: list of todays attending/confirmed events
@@ -129,8 +130,6 @@ else:
 
 service = build("calendar", "v3", credentials=credentials)
 
-# TODO: [NTH] Check if the time between `timeMin` and `timeMax`is too less
-
 # ALl events from today in selected calendar
 
 current_time = datetime.now(pytz.timezone(user_timezone))
@@ -167,7 +166,6 @@ print(f"{timeMin} \nand \n{timeMax}\n")
 # Events being attended
 attending_events = []
 
-# pprint(sorted_events_with_summaries)
 
 for i in sorted_events_with_summaries:
     my_response_status = "Unknown"
@@ -214,9 +212,10 @@ print_time_data(
     "Final result: Broken up time blocks ", plannable_timeblocks, True, True
 )
 
-# TODO: [MUST HAVE] create the events
-
-# TODO: [MUST HAVE] create events with identifiers so that this code can recognize it
 
 # TODO: [MUST HAVE] if there are events in the rest of the day that were previously made by this code
 #      the user should get the option to retain or re-scedule the timeslot
+
+# TODO: [MUST HAVE] create the events
+
+# TODO: [MUST HAVE] create events with identifiers so that this code can recognize it
