@@ -2,6 +2,8 @@ import copy
 from datetime import datetime, timedelta
 from app_scripts.print_time_data import print_time_data
 
+MIN_TIMEBLOCK_DURATION = 600
+
 
 def break_up_free_timeblocks(
     free_timeblocks_list: list, block_size: int = 3600, debug_mode: bool = False
@@ -29,6 +31,10 @@ def break_up_free_timeblocks(
                 ]
 
     """
+
+    if MIN_TIMEBLOCK_DURATION >= block_size:
+        print_time_data("Could not process since min block duration is ")
+        return free_timeblocks_list
 
     plannable_timeblocks_list = []
     temp_timeblocks_list = []
@@ -62,13 +68,13 @@ def break_up_free_timeblocks(
             datetime.fromisoformat(timeblock[1]) - datetime.fromisoformat(timeblock[0])
         ).total_seconds()
 
-        if duration_of_timeblock > 600:
+        if duration_of_timeblock > MIN_TIMEBLOCK_DURATION:
             plannable_timeblocks_list.append(timeblock)
 
     if debug_mode:
         drop_in_number = len(temp_timeblocks_list) - len(plannable_timeblocks_list)
-        print(
-            f"Drop in number of timeblocks due to small durations = {str(drop_in_number)}"
+        print_time_data(
+            f"{str(drop_in_number)} lesser timeblocks due to small durations"
         )
 
     return plannable_timeblocks_list
