@@ -13,6 +13,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from app_scripts.print_time_data import print_time_data
 
 from app_scripts.get_free_timeslots import get_free_timeslots
+from app_scripts.round_timeblocks import round_timeblocks
 from app_scripts.break_up_free_timeblocks import break_up_free_timeblocks
 
 try:
@@ -206,11 +207,15 @@ timeMax = time_data_dict["timeMax"]
 free_timeblocks = get_free_timeslots(
     timeMin, timeMax, scheduled_time_blocks, DEBUG_MODE
 )
-plannable_timeblocks = break_up_free_timeblocks(free_timeblocks, 3600, DEBUG_MODE)
+
+rounded_free_timeblocks = round_timeblocks(free_timeblocks)
+plannable_timeblocks = break_up_free_timeblocks(
+    rounded_free_timeblocks, 3600, DEBUG_MODE
+)
 
 print_time_data("Final result: Current time ", timeMin, True, True)
 print_time_data("Final result: Blocked time ", scheduled_time_blocks, True, True)
-print_time_data("Final result: Free time ", free_timeblocks, True, True)
+print_time_data("Final result: Free time ", rounded_free_timeblocks, True, True)
 print_time_data(
     "Final result: Broken up time blocks ", plannable_timeblocks, True, True
 )
@@ -223,33 +228,39 @@ default_event_details = {
 
 for a_plannable_timeblock in plannable_timeblocks:
 
-    print("For timeblock")
-    print(a_plannable_timeblock)
+    print("For timeblock", a_plannable_timeblock)
+    print("Ctrl+C to skip this timeblock")
 
     temp_details = copy.deepcopy(default_event_details)
 
-    for detail in default_event_details.keys():
+    try:
 
-        temp = str(input(f"[Leave empty and press enter to use default]\n{detail}:"))
-        if temp == "":
-            temp = default_event_details[detail]
+        for detail in default_event_details.keys():
 
-        temp_details[detail] = temp
+            temp = str(
+                input(f"[Leave empty and press enter to use default]\n{detail}:")
+            )
+            if temp == "":
+                temp = default_event_details[detail]
 
-    summary = temp_details["summary"]
-    location = temp_details["location"]
-    description = temp_details["description"]
+            temp_details[detail] = temp
 
-    event = {
-        "summary": summary,
-        "location": location,
-        "description": f"{DEFAULT_DESCRIPTION_PREFIX}: {description}",
-        "start": {"dateTime": a_plannable_timeblock[0], "timeZone": user_timezone},
-        "end": {"dateTime": a_plannable_timeblock[1], "timeZone": user_timezone},
-    }
+        summary = temp_details["summary"]
+        location = temp_details["location"]
+        description = temp_details["description"]
 
-    event = service.events().insert(calendarId=calendar_name, body=event).execute()
-    # print(f"Event created: {event.get('htmlLink')}")
+        event = {
+            "summary": summary,
+            "location": location,
+            "description": f"{DEFAULT_DESCRIPTION_PREFIX}: {description}",
+            "start": {"dateTime": a_plannable_timeblock[0], "timeZone": user_timezone},
+            "end": {"dateTime": a_plannable_timeblock[1], "timeZone": user_timezone},
+        }
+
+        event = service.events().insert(calendarId=calendar_name, body=event).execute()
+        # print(f"Event created: {event.get('htmlLink')}")
+    except KeyboardInterrupt:
+        print("\nSkipping ", a_plannable_timeblock)
 
 
 # TODO: [MUST HAVE] if there are events in the rest of the day that were previously made by this code
