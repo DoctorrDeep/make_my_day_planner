@@ -28,3 +28,6 @@ jobs:
       run: |
         pip install pytest
         pytest -v
+    - name: Test with doctest
+      run: |
+        python -m doctest -v app_scripts/*.py
