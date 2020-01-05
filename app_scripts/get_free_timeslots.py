@@ -80,7 +80,10 @@ def get_free_timeslots(
             next_free_timeset = free_timeset_results["next_free_timeset"]
 
         if next_free_timeset not in list_of_free_timesets:
-            duration_of_timeset = (datetime.fromisoformat(next_free_timeset[1]) - datetime.fromisoformat(next_free_timeset[0])).total_seconds()
+            duration_of_timeset = (
+                datetime.fromisoformat(next_free_timeset[1])
+                - datetime.fromisoformat(next_free_timeset[0])
+            ).total_seconds()
             if duration_of_timeset >= 1:
                 list_of_free_timesets.append(next_free_timeset)
         else:
