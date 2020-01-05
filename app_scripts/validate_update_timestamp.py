@@ -27,6 +27,10 @@ def validate_update_timestamp(
     Output
     new_timeset: list of 2 isoformat timestamp strings.
         Example: ['2019-12-20T09:30:00+01:00', '2019-12-20T09:45:00+01:00']
+
+    Doctest
+    >>> validate_update_timestamp(['2019-12-20T09:30:00+01:00', '2019-12-20T11:45:00+01:00'],[['2019-12-20T11:30:00+01:00', '2019-12-20T11:45:00+01:00']])
+    ['2019-12-20T09:30:00+01:00', '2019-12-20T11:30:00+01:00']
     """
 
     temp_timeset = copy.deepcopy(a_timeset)

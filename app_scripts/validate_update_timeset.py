@@ -16,6 +16,12 @@ def validate_update_timeset(a_timeset: list) -> list:
     Output
     a_timeset: list of 2 isoformat timestamp strings.
         Example: ['2019-12-20T09:30:00+01:00', '2019-12-20T09:45:00+01:00']
+
+    >>> validate_update_timeset(['2019-12-20T09:45:00+01:00', '2019-12-20T09:30:00+01:00'])
+    ['2019-12-20T09:45:00+01:00', '2019-12-20T09:45:00.000001+01:00']
+
+    >>> validate_update_timeset(['2019-12-20T09:45:00+01:00', '2019-12-20T11:30:00+01:00'])
+    ['2019-12-20T09:45:00+01:00', '2019-12-20T11:30:00+01:00']
     """
 
     new_timeset = copy.deepcopy(a_timeset)
