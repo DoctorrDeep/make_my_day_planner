@@ -11,11 +11,11 @@ def get_free_timeslots(
     """
     This function will take a timerange (from timeMin to timeMax) and blocks of
     busy times (scheduled_time_blocks). To calculate the free time inbetween as
-    blocks(list_of_free_timesets) in the same format as teh busy times.
+    blocks(list_of_free_timesets) in the same format as the busy times.
 
     Input:
-    - timeMin: isoformat timestamp string. Example "2019-10-20T12:20:00.00+01:00"
-    - timeMax: isoformat timestamp string. Example "2019-10-20T15:50:00.00+01:00"
+    - timeMin: isoformat timestamp string. Example "2019-10-20T12:20:00.000+01:00"
+    - timeMax: isoformat timestamp string. Example "2019-10-20T15:50:00.000+01:00"
     - scheduled_time_blocks: list of list of 2 timestamps (each formatted as described above)
         Example: [
                     ['2019-12-20T09:30:00+01:00', '2019-12-20T09:45:00+01:00'],
@@ -30,6 +30,11 @@ def get_free_timeslots(
                     ['2019-12-20T14:45:00+01:00', '2019-12-20T18:45:00+01:00'],
                     ['2019-12-20T17:00:00+01:00', '2019-12-20T17:45:00+01:00']
                 ]
+
+    Doctest
+    >>> get_free_timeslots('2019-10-20T12:00:00.000+01:00', '2019-10-20T14:00:00.000+01:00', [['2019-10-20T13:00:00.000+01:00', '2019-10-20T14:00:00.000+01:00']])
+    [['2019-10-20T12:00:00.000+01:00', '2019-10-20T13:00:00.000+01:00']]
+
     """
     reached_end_of_day = False
     beginning_of_free_time = timeMin
@@ -75,7 +80,9 @@ def get_free_timeslots(
             next_free_timeset = free_timeset_results["next_free_timeset"]
 
         if next_free_timeset not in list_of_free_timesets:
-            list_of_free_timesets.append(next_free_timeset)
+            duration_of_timeset = (datetime.fromisoformat(next_free_timeset[1]) - datetime.fromisoformat(next_free_timeset[0])).total_seconds()
+            if duration_of_timeset >= 1:
+                list_of_free_timesets.append(next_free_timeset)
         else:
             if previous_result == next_free_timeset:
                 reached_end_of_day = True

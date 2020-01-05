@@ -10,9 +10,11 @@ def get_next_avialable_open_timeset(
     This function will hop throught a list of events provided as input and
     check till when there is free time based on one initial timestamp also
     provided in the input.
+    If it has not found the free time at the end of the list then it informs
+    that the end of the list has been reached
 
     Input
-    a_timestamp: isoformat timestamp string. Example "2019-10-20T12:20:00.00+01:00"
+    a_timestamp: isoformat timestamp string. Example "2019-10-20T12:20:00.000+01:00"
     list_of_timesets: list of list of 2 timestamps (each formatted as described above)
         Example: [
                     ['2019-12-20T09:30:00+01:00', '2019-12-20T09:45:00+01:00'],
@@ -23,7 +25,12 @@ def get_next_avialable_open_timeset(
     Output
     dictionary:
         next_free_timeset: list of 2 isoformat timestamp strings
+            Example: ['2019-12-20T09:30:00+01:00', '2019-12-20T09:45:00+01:00']
         reached_end_of_list: Boolean
+
+    Doctest
+    >>> get_next_avialable_open_timeset('2019-10-20T12:20:00.000+01:00', [['2019-12-20T19:30:00+01:00', '2019-12-20T19:45:00+01:00']])
+    {'next_free_timeset': ['2019-10-20T12:20:00.000+01:00', '2019-12-20T19:30:00+01:00'], 'reached_end_of_list': False}
     """
 
     results = {"next_free_timeset": None, "reached_end_of_list": True}
