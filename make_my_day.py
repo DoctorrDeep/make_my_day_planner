@@ -26,7 +26,7 @@ except AssertionError:
     print("Aborting this run.")
     exit()
 
-DEBUG_MODE = True
+DEBUG_MODE = False
 CLIENT_SECRET = "client_secret"
 CREDENTIAL_PICKLE = "calendar_access_credential.p"
 DEFAULT_COUNTRY_TIMEZONE = "Europe/Amsterdam"
@@ -228,8 +228,8 @@ default_event_details = {
 
 for a_plannable_timeblock in plannable_timeblocks:
 
-    print("For timeblock", a_plannable_timeblock)
-    print("Ctrl+C to skip this timeblock")
+    print("\n\nFor timeblock:\n", a_plannable_timeblock)
+    print("[Ctrl+C to skip this timeblock]")
 
     temp_details = copy.deepcopy(default_event_details)
 
