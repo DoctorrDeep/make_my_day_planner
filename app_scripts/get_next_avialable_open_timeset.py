@@ -42,6 +42,7 @@ def get_next_avialable_open_timeset(
         if datetime.fromisoformat(a_timestamp) <= datetime.fromisoformat(timeset[1]):
             filtered_list_of_timesets.append(timeset)
 
+    # get rid of timesets that end before timestamp
     if filtered_list_of_timesets != sorted_list_of_timesets:
         print_time_data(
             "Next available_timeset: filtering effect from:",

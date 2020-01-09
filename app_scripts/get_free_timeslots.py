@@ -64,8 +64,19 @@ def get_free_timeslots(
             beginning_of_free_time, list_of_scheduled_timesets, debug_mode
         )
 
-        if free_timeset_results["reached_end_of_list"]:
+        if (
+            free_timeset_results["reached_end_of_list"]
+            and free_timeset_results["next_free_timeset"] == None
+        ):
             next_free_timeset = [beginning_of_free_time, timeMax]
+        elif (
+            free_timeset_results["reached_end_of_list"]
+            and free_timeset_results["next_free_timeset"] != []
+        ):
+            next_free_timeset = free_timeset_results["next_free_timeset"]
+            free_timeset_results["reached_end_of_list"] = False
+
+        if free_timeset_results["reached_end_of_list"]:
             print_time_data(
                 "Get free timeslot: (while loop) Reached End of Day: Next free timeset",
                 next_free_timeset,
