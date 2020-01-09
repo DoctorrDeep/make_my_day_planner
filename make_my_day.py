@@ -208,7 +208,14 @@ free_timeblocks = get_free_timeslots(
     timeMin, timeMax, scheduled_time_blocks, DEBUG_MODE
 )
 
-rounded_free_timeblocks = round_timeblocks(free_timeblocks)
+duration_from_now = (
+    datetime.fromisoformat(free_timeblocks[0][0]) - datetime.fromisoformat(timeMin)
+).total_seconds()
+if duration_from_now <= 900:
+    rounded_free_timeblocks = round_timeblocks(free_timeblocks)
+else:
+    rounded_free_timeblocks = free_timeblocks
+
 plannable_timeblocks = break_up_free_timeblocks(
     rounded_free_timeblocks, 3600, DEBUG_MODE
 )
