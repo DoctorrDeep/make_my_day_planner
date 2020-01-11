@@ -31,3 +31,9 @@ jobs:
     - name: Test with doctest
       run: |
         python -m doctest -v app_scripts/*.py
+    - name: Test Coverage
+      run: |
+        pip install pytest
+        pip install coverage
+        pip install pytest-cov
+        pytest --cov
