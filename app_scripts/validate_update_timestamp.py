@@ -9,7 +9,7 @@ def validate_update_timestamp(
     a_timeset: list, list_of_timesets: list, debug_mode: bool = False
 ) -> list:
     """
-    This function will hop throught a list of events provided as input and
+    This function will hop through a list of events provided as input and
     check till whether a given timeset(start and end) lies inside any of the
     events(1 event = 1 timeset) provided in the input.
     If it lies inside, or overlaps, an event or multiple events, then a new

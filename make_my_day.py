@@ -1,20 +1,19 @@
-import json
 import copy
+import json
 import pickle
-import pytz
 import sys
-import googleapiclient
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
+import googleapiclient
+import pytz
 from apiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 
-from app_scripts.print_time_data import print_time_data
-
-from app_scripts.get_free_timeslots import get_free_timeslots
-from app_scripts.round_timeblocks import round_timeblocks
 from app_scripts.break_up_free_timeblocks import break_up_free_timeblocks
+from app_scripts.get_free_timeslots import get_free_timeslots
+from app_scripts.print_time_data import print_time_data
+from app_scripts.round_timeblocks import round_timeblocks
 
 try:
     # TODO: [NTH] try-except broken since the code breaks due to compiler error
@@ -40,8 +39,8 @@ The following actions will be carried out
 - fetch todays events
 
 It will create the following in dictionary(time_data_dict) format:
-- timeMin: isoformat timestamp string
-- timeMax: isoformat timestamp string
+- time_min: isoformat timestamp string
+- time_max: isoformat timestamp string
 - scheduled_time_blocks: list of todays attending/confirmed events
     start and end times sorted by startTime
     Example: [
@@ -137,16 +136,16 @@ service = build("calendar", "v3", credentials=credentials)
 # ALl events from today in selected calendar
 
 current_time = datetime.now(pytz.timezone(user_timezone))
-timeMin = current_time.isoformat()
-timeMax = f"{timeMin.split('T')[0]}T23:59:59+{timeMin.split('+')[1]}"
+time_min = current_time.isoformat()
+time_max = f"{time_min.split('T')[0]}T23:59:59+{time_min.split('+')[1]}"
 
 try:
     todays_events = (
         service.events()
-        .list(
+            .list(
             calendarId=calendar_name,
-            timeMin=timeMin,
-            timeMax=timeMax,
+            time_min=time_min,
+            time_max=time_max,
             orderBy="startTime",
             singleEvents=True,
         )
@@ -165,7 +164,7 @@ sorted_events_with_summaries = sorted(
 )
 
 print("Events in your calendar between")
-print(f"{timeMin} \nand \n{timeMax}\n")
+print(f"{time_min} \nand \n{time_max}\n")
 
 # Events being attended
 attending_events = []
@@ -196,20 +195,20 @@ scheduled_time_blocks = [
 
 time_data_dict = {
     "scheduled_time_blocks": scheduled_time_blocks,
-    "timeMin": timeMin,
-    "timeMax": timeMax,
+    "time_min": time_min,
+    "time_max": time_max,
 }
 
 scheduled_time_blocks = time_data_dict["scheduled_time_blocks"]
-timeMin = time_data_dict["timeMin"]
-timeMax = time_data_dict["timeMax"]
+time_min = time_data_dict["time_min"]
+time_max = time_data_dict["time_max"]
 
 free_timeblocks = get_free_timeslots(
-    timeMin, timeMax, scheduled_time_blocks, DEBUG_MODE
+    time_min, time_max, scheduled_time_blocks, DEBUG_MODE
 )
 
 duration_from_now = (
-    datetime.fromisoformat(free_timeblocks[0][0]) - datetime.fromisoformat(timeMin)
+        datetime.fromisoformat(free_timeblocks[0][0]) - datetime.fromisoformat(time_min)
 ).total_seconds()
 if duration_from_now <= 900:
     rounded_free_timeblocks = round_timeblocks(free_timeblocks)
@@ -220,7 +219,7 @@ plannable_timeblocks = break_up_free_timeblocks(
     rounded_free_timeblocks, 3600, DEBUG_MODE
 )
 
-print_time_data("Final result: Current time ", timeMin, True, True)
+print_time_data("Final result: Current time ", time_min, True, True)
 print_time_data("Final result: Blocked time ", scheduled_time_blocks, True, True)
 print_time_data("Final result: Free time ", rounded_free_timeblocks, True, True)
 print_time_data(

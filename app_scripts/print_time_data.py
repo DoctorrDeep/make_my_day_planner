@@ -3,7 +3,7 @@ from pprint import pprint
 
 def print_time_data(
         helptext: str,
-        timestr="",
+        timedata=[],
         debug_mode: bool = False,
         override_debug: bool = False,
 ):
@@ -18,4 +18,4 @@ def print_time_data(
 
     if debug_mode or override_debug:
         print("\n", helptext)
-        pprint(timestr)
+        pprint(timedata)

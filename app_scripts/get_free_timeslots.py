@@ -7,16 +7,16 @@ from app_scripts.validate_update_timestamp import validate_update_timestamp
 
 
 def get_free_timeslots(
-        timeMin: str, timeMax: str, scheduled_time_blocks: list, debug_mode: bool = False
+        time_min: str, time_max: str, scheduled_time_blocks: list, debug_mode: bool = False
 ) -> list:
     """
-    This function will take a timerange (from timeMin to timeMax) and blocks of
+    This function will take a timerange (from time_min to time_max) and blocks of
     busy times (scheduled_time_blocks). To calculate the free time inbetween as
     blocks(list_of_free_timesets) in the same format as the busy times.
 
     Input:
-    - timeMin: isoformat timestamp string. Example "2019-10-20T12:20:00.000+01:00"
-    - timeMax: isoformat timestamp string. Example "2019-10-20T15:50:00.000+01:00"
+    - time_min: isoformat timestamp string. Example "2019-10-20T12:20:00.000+01:00"
+    - time_max: isoformat timestamp string. Example "2019-10-20T15:50:00.000+01:00"
     - scheduled_time_blocks: list of list of 2 timestamps (each formatted as described above)
         Example: [
                     ['2019-12-20T09:30:00+01:00', '2019-12-20T09:45:00+01:00'],
@@ -38,8 +38,9 @@ def get_free_timeslots(
 
     """
     reached_end_of_day = False
-    beginning_of_free_time = timeMin
+    beginning_of_free_time = time_min
     list_of_free_timesets = []
+    next_free_timeset = None
     previous_result = []
     list_of_scheduled_timesets = copy.deepcopy(scheduled_time_blocks)
 
@@ -69,7 +70,7 @@ def get_free_timeslots(
                 free_timeset_results["reached_end_of_list"]
                 and (free_timeset_results["next_free_timeset"] is None)
         ):
-            next_free_timeset = [beginning_of_free_time, timeMax]
+            next_free_timeset = [beginning_of_free_time, time_max]
         elif (
             free_timeset_results["reached_end_of_list"]
             and free_timeset_results["next_free_timeset"] != []
