@@ -67,7 +67,7 @@ def get_free_timeslots(
 
         if (
                 free_timeset_results["reached_end_of_list"]
-                and free_timeset_results["next_free_timeset"] is None
+                and (free_timeset_results["next_free_timeset"] is None)
         ):
             next_free_timeset = [beginning_of_free_time, timeMax]
         elif (
