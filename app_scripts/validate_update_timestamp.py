@@ -1,5 +1,6 @@
 import copy
 from datetime import datetime
+
 from app_scripts.print_time_data import print_time_data
 from app_scripts.validate_update_timeset import validate_update_timeset
 
@@ -38,21 +39,16 @@ def validate_update_timestamp(
 
     for timeset in list_of_timesets:
 
-        if datetime.fromisoformat(temp_timeset[0]) >= datetime.fromisoformat(
-            timeset[0]
-        ) and datetime.fromisoformat(temp_timeset[0]) < datetime.fromisoformat(
-            timeset[1]
-        ):
+        if datetime.fromisoformat(
+                timeset[1] > datetime.fromisoformat(temp_timeset[0]) >= datetime.fromisoformat(timeset[0])):
             new_timeset = validate_update_timeset([timeset[1], temp_timeset[1]])
             temp_timeset = new_timeset
 
             print_time_data(f"{a_timeset}\n\tChanged to:", temp_timeset, debug_mode)
 
-        if datetime.fromisoformat(temp_timeset[1]) > datetime.fromisoformat(
-            timeset[0]
-        ) and datetime.fromisoformat(temp_timeset[1]) <= datetime.fromisoformat(
-            timeset[1]
-        ):
+        if datetime.fromisoformat(
+                timeset[1] >= datetime.fromisoformat(temp_timeset[1]) > datetime.fromisoformat(
+                    timeset[0])):
             new_timeset = validate_update_timeset([temp_timeset[0], timeset[0]])
             temp_timeset = new_timeset
 

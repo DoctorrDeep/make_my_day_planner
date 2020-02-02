@@ -46,7 +46,7 @@ def round_timeblocks(list_of_timeblocks: list) -> list:
     new_minute = None
 
     for i, block in enumerate(minute_blocks):
-        if minute_of_timestamp >= block[0] and minute_of_timestamp <= block[1]:
+        if block[1] >= minute_of_timestamp >= block[0]:
             block_index = i
 
     temp_time = datetime.fromisoformat(first_timestamp)

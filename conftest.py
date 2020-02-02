@@ -1,6 +1,6 @@
 """
 Pytest setup file for testing.
-Pytest will test all files in the `tests` directory in the root forlder of
+Pytest will test all files in the `tests` directory in the root folder of
 this project.
 Run with `pytest` in root of project
 or

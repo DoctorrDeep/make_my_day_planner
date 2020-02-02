@@ -1,13 +1,14 @@
 from datetime import datetime
+
 from app_scripts.print_time_data import print_time_data
 from app_scripts.validate_update_timestamp import validate_update_timestamp
 
 
-def get_next_avialable_open_timeset(
-    a_timestamp: str, list_of_timesets: list, debug_mode: bool = False
+def get_next_available_open_timeset(
+        a_timestamp: str, list_of_timesets: list, debug_mode: bool = False
 ) -> dict:
     """
-    This function will hop throught a list of events provided as input and
+    This function will hop through a list of events provided as input and
     check till when there is free time based on one initial timestamp also
     provided in the input.
     If it has not found the free time at the end of the list then it informs
@@ -29,7 +30,7 @@ def get_next_avialable_open_timeset(
         reached_end_of_list: Boolean
 
     Doctest
-    >>> get_next_avialable_open_timeset('2019-10-20T12:20:00.000+01:00', [['2019-12-20T19:30:00+01:00', '2019-12-20T19:45:00+01:00']])
+    >>> get_next_available_open_timeset('2019-10-20T12:20:00.000+01:00', [['2019-12-20T19:30:00+01:00', '2019-12-20T19:45:00+01:00']])
     {'next_free_timeset': ['2019-10-20T12:20:00.000+01:00', '2019-12-20T19:30:00+01:00'], 'reached_end_of_list': False}
     """
 

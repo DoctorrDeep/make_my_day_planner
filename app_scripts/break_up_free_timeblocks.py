@@ -1,5 +1,6 @@
 import copy
 from datetime import datetime, timedelta
+
 from app_scripts.print_time_data import print_time_data
 
 MIN_TIMEBLOCK_DURATION = 600
@@ -9,7 +10,7 @@ def break_up_free_timeblocks(
     free_timeblocks_list: list, block_size: int = 3600, debug_mode: bool = False
 ) -> list:
     """
-    This function will hop throught a list of timeblocks provided as input and
+    This function will hop through a list of timeblocks provided as input and
     break them into smaller timeblocks of a designated size. The size defaults
     to one hour and can be changed. It is set in seconds.
     Any times smaller than 10 minutes will be omitted from the final list

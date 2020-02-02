@@ -1,12 +1,13 @@
 import copy
 from datetime import datetime
+
+from app_scripts.get_next_available_open_timeset import get_next_available_open_timeset
 from app_scripts.print_time_data import print_time_data
 from app_scripts.validate_update_timestamp import validate_update_timestamp
-from app_scripts.get_next_avialable_open_timeset import get_next_avialable_open_timeset
 
 
 def get_free_timeslots(
-    timeMin: str, timeMax: str, scheduled_time_blocks: list, debug_mode: bool = False
+        timeMin: str, timeMax: str, scheduled_time_blocks: list, debug_mode: bool = False
 ) -> list:
     """
     This function will take a timerange (from timeMin to timeMax) and blocks of
@@ -60,13 +61,13 @@ def get_free_timeslots(
             debug_mode,
         )
 
-        free_timeset_results = get_next_avialable_open_timeset(
+        free_timeset_results = get_next_available_open_timeset(
             beginning_of_free_time, list_of_scheduled_timesets, debug_mode
         )
 
         if (
-            free_timeset_results["reached_end_of_list"]
-            and free_timeset_results["next_free_timeset"] == None
+                free_timeset_results["reached_end_of_list"]
+                and free_timeset_results["next_free_timeset"] is None
         ):
             next_free_timeset = [beginning_of_free_time, timeMax]
         elif (
