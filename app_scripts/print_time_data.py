@@ -2,10 +2,7 @@ from pprint import pprint
 
 
 def print_time_data(
-        helptext: str,
-        timedata=[],
-        debug_mode: bool = False,
-        override_debug: bool = False,
+        helptext: str, timedata=[], debug_mode: bool = False, override_debug: bool = False
 ):
     """
     This will print results in a nice format.

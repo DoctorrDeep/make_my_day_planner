@@ -66,14 +66,13 @@ def get_free_timeslots(
             beginning_of_free_time, list_of_scheduled_timesets, debug_mode
         )
 
-        if (
-                free_timeset_results["reached_end_of_list"]
-                and (free_timeset_results["next_free_timeset"] is None)
+        if free_timeset_results["reached_end_of_list"] and (
+                free_timeset_results["next_free_timeset"] is None
         ):
             next_free_timeset = [beginning_of_free_time, time_max]
         elif (
-            free_timeset_results["reached_end_of_list"]
-            and free_timeset_results["next_free_timeset"] != []
+                free_timeset_results["reached_end_of_list"]
+                and free_timeset_results["next_free_timeset"] != []
         ):
             next_free_timeset = free_timeset_results["next_free_timeset"]
             free_timeset_results["reached_end_of_list"] = False
