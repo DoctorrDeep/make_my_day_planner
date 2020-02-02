@@ -4,3 +4,7 @@ __pycache__/*
 *.p
 *pytest_cache*
 .coverage
+.idea
+venv
+*.html
+*.css

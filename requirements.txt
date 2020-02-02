@@ -3,3 +3,6 @@ google-auth
 google-auth-oauthlib
 google-api-python-client
 pytest
+coverage
+pytest-cov
+pytest-report
