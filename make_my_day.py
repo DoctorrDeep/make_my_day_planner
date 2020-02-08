@@ -166,9 +166,8 @@ sorted_events_with_summaries = sorted(
 print("Events in your calendar between")
 print(f"{time_min} \nand \n{time_max}\n")
 
-# Events being attended
+# Fetch all Events being attended by only start and end times
 attending_events = []
-
 
 for i in sorted_events_with_summaries:
     my_response_status = "Unknown"
@@ -193,6 +192,9 @@ scheduled_time_blocks = [
     [i["start"]["dateTime"], i["end"]["dateTime"]] for i in attending_events
 ]
 
+# Done fetching the attending events. Named them : scheduled_time_blocks
+# Now, time to make sense of them i.e. create the blocks of time where "nothing" is scheduled.
+
 time_data_dict = {
     "scheduled_time_blocks": scheduled_time_blocks,
     "time_min": time_min,
@@ -207,6 +209,10 @@ free_timeblocks = get_free_timeslots(
     time_min, time_max, scheduled_time_blocks, DEBUG_MODE
 )
 
+# Done calculating free time during the day.
+# If the first free timeblock is very small (less than 15 mins) then ignore it
+# We call this: rounding out the free timeblocks
+
 duration_from_now = (
         datetime.fromisoformat(free_timeblocks[0][0]) - datetime.fromisoformat(time_min)
 ).total_seconds()
@@ -214,6 +220,10 @@ if duration_from_now <= 900:
     rounded_free_timeblocks = round_timeblocks(free_timeblocks)
 else:
     rounded_free_timeblocks = free_timeblocks
+
+# Done rounding out the free timeslots
+# Now we break up the available time into 1 hour chunks.
+# We call this plannable_timeblocks
 
 plannable_timeblocks = break_up_free_timeblocks(
     rounded_free_timeblocks, 3600, DEBUG_MODE
@@ -225,6 +235,10 @@ print_time_data("Final result: Free time ", rounded_free_timeblocks, True, True)
 print_time_data(
     "Final result: Broken up time blocks ", plannable_timeblocks, True, True
 )
+
+# We now have the plannable chunks of time through the rest of the day
+# Time to create events out of them. The user gets to decide whether or not
+# an event needs to be planned into a free time block or kept free.
 
 default_event_details = {
     "summary": "make_my_day event",
