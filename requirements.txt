@@ -5,4 +5,4 @@ google-api-python-client
 pytest
 coverage
 pytest-cov
-pytest-report
+pytest-html

@@ -18,7 +18,7 @@ If you are reading this, I hope this can be a better solution than pen and paper
 # How to get the client ready
 
 * Install the python client for google and oauth
-  * Anaconda users : `conda install --channel “conda-forge” --file requirements.txt`
+  * Anaconda users : `conda install --channel "conda-forge" --file requirements.txt`
   * Normal pip users : `pip install -r requirements.txt`
 * Intialize and create a secrets json
   * Create project in https://console.developers.google.com/

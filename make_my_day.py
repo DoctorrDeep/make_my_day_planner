@@ -144,8 +144,8 @@ try:
         service.events()
             .list(
             calendarId=calendar_name,
-            time_min=time_min,
-            time_max=time_max,
+            timeMin=time_min,
+            timeMax=time_max,
             orderBy="startTime",
             singleEvents=True,
         )
